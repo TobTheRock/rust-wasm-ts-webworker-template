@@ -1,0 +1,17 @@
+{
+  "name": "typescript-webworker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:ts",
+    "build:ts": "tsc --build",
+    "clean": "tsc --build --clean && yarn rimraf dist"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "wasm-lib": "^0.1.0"
+  }
+}
