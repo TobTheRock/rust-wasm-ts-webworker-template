@@ -1,7 +1,11 @@
+type Transaction = {
+    command: string;
+    request?: any;
+    response?: any;
+}
+
 type InitializeTransaction = {
     command: "initialize"
-    request: void
-    response: void;
 }
 
 type ExampleAskDeepThoughtTransaction = {
@@ -13,8 +17,12 @@ type ExampleAskDeepThoughtTransaction = {
 type Transactions = InitializeTransaction | ExampleAskDeepThoughtTransaction;
 
 export type Command = Transactions["command"];
-export type RequestData = Transactions["request"];
-export type ResponseData = Transactions["response"];
+
+type ExtractRequestFromTransaction<T extends Transaction> =  T extends {request: any} ? T["request"] : void;
+export type RequestData = ExtractRequestFromTransaction<Transactions>;
+
+type ExtractResponseFromTransaction<T extends Transaction> =  T extends {response: any} ? T["response"] : void;
+export type ResponseData = ExtractResponseFromTransaction<Transactions>;
 
 export type TransactionId = number;
 export interface RequestMessage { readonly command: Command, readonly id: number, requestData: RequestData };
@@ -36,9 +44,9 @@ export function isResponseErrorMessage(message: ResponseMessage): message is Res
     return "error" in message;
 }
 
-type TransactionFieldFromCommand<Cmd extends Command, Field extends keyof Transactions> = Extract<Transactions, { command: Cmd }>[Field];
-type RequestDataFromCommand<Cmd extends Command> = TransactionFieldFromCommand<Cmd, "request">;
-type ResponseDataFromCommand<Cmd extends Command> = TransactionFieldFromCommand<Cmd, "response">;
+type ExtractTransactionFromCommand<Cmd extends Command> = Extract<Transactions, { command: Cmd }>;
+type RequestDataFromCommand<Cmd extends Command> = ExtractRequestFromTransaction<ExtractTransactionFromCommand<Cmd>>;
+type ResponseDataFromCommand<Cmd extends Command> = ExtractResponseFromTransaction<ExtractTransactionFromCommand<Cmd>>;
 
 
 type TransactionResult<Cmd extends Command> = {
