@@ -53,6 +53,7 @@ export class ClientImplementation implements Client {
     }
 
     close() {
+        this._transactionInitiator.abortAllOngoing();
         this._worker.terminate();
     }
 
