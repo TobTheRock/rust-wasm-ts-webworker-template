@@ -1,7 +1,7 @@
 import * as wasmlib from "wasm-lib"
 import init from "wasm-lib"
 import wasmData from "wasm-lib/wasm_lib_bg.wasm"
-import { RequestMessage, ResponseMessage, ResponseData, TransactionResponder } from "./Transactions";
+import { RequestMessage, ResponseMessage, TransactionResponder } from "./Transactions";
 
 function postMessageToClient(message: ResponseMessage) {
     console.info("[Worker] Post message back to [Client] ", message);

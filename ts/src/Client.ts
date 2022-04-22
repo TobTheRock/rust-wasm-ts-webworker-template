@@ -4,7 +4,7 @@ import {  RequestMessage, ResponseMessage, TransactionInitiator } from "./Transa
 let workerBlobUrl = "";
 function getWorkerBlobUrl() {
     if (!workerBlobUrl) {
-        const blob = new Blob([atob(Base64Worker)], {
+        const blob = new Blob([window.atob(Base64Worker)], {
             type: "application/javascript",
         });
         workerBlobUrl = URL.createObjectURL(blob);
@@ -21,7 +21,6 @@ export interface Client {
 export class ClientImplementation implements Client {
     private _transactionInitiator: TransactionInitiator;
     private _worker: Worker;
-    private _transactions = new Map();
 
     constructor() {
         this._transactionInitiator = new TransactionInitiator();
