@@ -18,7 +18,6 @@ function getWorkerBlobUrl() {
 * is provided by the TransactionInitiator. To use it simply add your own type defininitions to transaction/Transactions.ts .
 */
 export interface Client {
-    initialize(): Promise<void>;
     close(): void;
     exampleAskDeepThought(question: string): Promise<number>;
 }
@@ -51,6 +50,7 @@ export class ClientImplementation implements Client {
         });
     }
 
+    // The call toinitialize is mandatory, so the WASM library is loaded before any other transaction.
     async initialize(): Promise<void> {
         const [message, promise] = this._transactionInitiator.initiateTransaction("initialize");
         this.postMessage(message, []);
