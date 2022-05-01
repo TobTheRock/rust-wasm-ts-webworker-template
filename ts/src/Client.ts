@@ -12,6 +12,11 @@ function getWorkerBlobUrl() {
     return workerBlobUrl;
 }
 
+/*
+* Client interface exposed to the user.
+* Note: You can extend it with your own methods. The communication with the webworker (request and response)
+* is provided by the TransactionInitiator. To use it simply add your own type defininitions to transaction/Transactions.ts .
+*/
 export interface Client {
     initialize(): Promise<void>;
     close(): void;

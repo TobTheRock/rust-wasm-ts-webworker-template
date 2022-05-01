@@ -4,11 +4,10 @@ import wasmData from "wasm-lib/wasm_lib_bg.wasm"
 
 import { RequestMessage, ResponseMessage, TransactionResponder } from "./transactions";
 
-function postMessageToClient(message: ResponseMessage) {
-    console.info("[Worker] Post message back to [Client] ", message);
-    postMessage(message);
-}
-
+/*
+* Note: For each command from the client which the webworker should respond to, 
+* register an action with the TransactionResponder.
+*/
 const transactionResponder = new TransactionResponder();
 
 transactionResponder.addResponseAction("initialize", async () => {
@@ -41,4 +40,9 @@ onmessage = async (event: MessageEvent) => {
         console.error("[Worker] Error caught, error= ", error);
         postMessageToClient({ id, error: error.message });
     }
+}
+
+function postMessageToClient(message: ResponseMessage) {
+    console.info("[Worker] Post message back to [Client] ", message);
+    postMessage(message);
 }

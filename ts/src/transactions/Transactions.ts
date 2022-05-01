@@ -1,7 +1,7 @@
 /*
 * Type definitions for transactions between the client (sending requests with a specific command and arbitrary data)
 * and the webworker (responding with arbitrary data).
-* Add your own as a type definition here, following the following structure:
+* Note: Add your own as a type definition here, following the following structure:
 */
 type Transaction = {
     command: string;
@@ -9,6 +9,9 @@ type Transaction = {
     response?: any;
 }
 
+/*
+* Mandatory first transaction to load the wasm library.
+*/
 type InitializeTransaction = {
     command: "initialize"
 }
