@@ -1,5 +1,5 @@
 import Base64Worker from "./Base64Worker.js";
-import {  RequestMessage, ResponseMessage, TransactionInitiator } from "./Transactions";
+import { TransactionInitiator, ResponseMessage, RequestMessage } from "./transactions"
 
 let workerBlobUrl = "";
 function getWorkerBlobUrl() {
@@ -66,7 +66,7 @@ export class ClientImplementation implements Client {
     private postMessage(
         message: RequestMessage,
         transferList: Transferable[] = []
-    )  {
+    ) {
         console.info(
             "[Client] Post message to [Worker]",
             JSON.stringify(message),

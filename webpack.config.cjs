@@ -52,7 +52,7 @@ const workerConfig = {
     asyncWebAssembly: true,
   },
   plugins: [
-    new CopyWebpackPlugin({ patterns: [{ from: "*", to: distLoose, context, globOptions: { ignore: [workerFile, b64WorkerFile] } }] }),
+    new CopyWebpackPlugin({ patterns: [{ from: "**/*", to: distLoose, context, globOptions: { ignore: [workerFile, b64WorkerFile] } }] }),
     new AfterBuildWebpackPlugin(() => inlineBase64Content(path.resolve(distLoose, packedWorkerFileName), path.resolve(distLoose, b64WorkerFile)))
   ]
 };
