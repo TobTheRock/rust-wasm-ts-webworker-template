@@ -48,17 +48,23 @@ type ExtractTransactionFromCommand<Cmd extends Command> = Extract<Transactions, 
 type RequestDataFromCommand<Cmd extends Command> = ExtractRequestFromTransaction<ExtractTransactionFromCommand<Cmd>>;
 type ResponseDataFromCommand<Cmd extends Command> = ExtractResponseFromTransaction<ExtractTransactionFromCommand<Cmd>>;
 
+type CommandsWithoutRequestData = Exclude<Transactions, {request: any} >["command"];
+type CommandsWithRequestData = Extract<Transactions, {request: any} >["command"];
+
 
 type TransactionResult<Cmd extends Command> = {
     onData: (value: ResponseDataFromCommand<Cmd> | PromiseLike<ResponseDataFromCommand<Cmd>>) => void;
     onError: (reason?: any) => void;
 }
 type ResultPromise<Cmd extends Command> = Promise<ResponseDataFromCommand<Cmd>>;
+
  export class TransactionInitiator {
     private _ongoingTransactions: Map<TransactionId, TransactionResult<Command>> = new Map();
     private _currentId: TransactionId = 0;
 
-    initiateTransaction<Cmd extends Command>(command: Cmd, requestData: RequestDataFromCommand<Cmd>): [RequestMessage, ResultPromise<Cmd>] {
+    initiateTransaction<Cmd extends CommandsWithRequestData>(command: Cmd, requestData: RequestDataFromCommand<Cmd>): [RequestMessage, ResultPromise<Cmd>];
+    initiateTransaction<Cmd extends CommandsWithoutRequestData>(command: Cmd): [RequestMessage, ResultPromise<Cmd>];
+    initiateTransaction<Cmd extends Command>(command: Cmd, requestData?: RequestDataFromCommand<Cmd>): [RequestMessage, ResultPromise<Cmd>] {
         const id = this._currentId++;
         const message: RequestMessage = {id, command, requestData};
         const promise:ResultPromise<Cmd> = new Promise((resolve, reject) => {
@@ -95,6 +101,7 @@ type ResultPromise<Cmd extends Command> = Promise<ResponseDataFromCommand<Cmd>>;
         })
         this._ongoingTransactions.clear();
     }
+
 }
 
 type ResponseAction<Cmd extends Command> = (requestData: RequestDataFromCommand<Cmd>) => ResponseDataFromCommand<Cmd> | PromiseLike<ResponseDataFromCommand<Cmd>>;

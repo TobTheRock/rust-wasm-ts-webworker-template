@@ -47,7 +47,7 @@ export class ClientImplementation implements Client {
     }
 
     async initialize(): Promise<void> {
-        const [message, promise] = this._transactionInitiator.initiateTransaction("initialize", undefined);
+        const [message, promise] = this._transactionInitiator.initiateTransaction("initialize");
         this.postMessage(message, []);
         return promise;
     }
